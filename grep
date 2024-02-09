@@ -1,7 +1,0 @@
-CONTAINER ID   IMAGE                                                  COMMAND                  CREATED        STATUS             PORTS                                       NAMES
-a09edb597311   postgres:alpine                                        "docker-entrypoint.s…"   41 hours ago   Up About an hour   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   backend-database-1
-e1468bc6c487   dotzerotechnologies/booking-calendar-nginx:latest      "/docker-entrypoint.…"   3 weeks ago    Up About an hour   0.0.0.0:80->80/tcp, :::80->80/tcp           eqg-booking-calendar-equmeniakyrkan-gotene-booking-calendar-proxy-1
-761b01b87d40   bookingcalendarbackend:latest                          "docker-entrypoint.s…"   3 weeks ago    Up About an hour   3000/tcp                                    eqg-booking-calendar-booking-calendar-backend-1
-fa53c7fcae3b   postgres:15                                            "docker-entrypoint.s…"   3 weeks ago    Up About an hour   5432/tcp                                    eqg-booking-calendar-database-1
-d2c69009cc3b   redis:alpine                                           "docker-entrypoint.s…"   3 weeks ago    Up About an hour   6379/tcp                                    eqg-booking-calendar-cache-1
-029d4423d8f7   dotzerotechnologies/booking-calendar-frontend:latest   "docker-entrypoint.s…"   3 weeks ago    Up About an hour   80/tcp, 3000/tcp                            eqg-booking-calendar-booking-calendar-frontend-1
