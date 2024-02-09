@@ -1,6 +1,8 @@
 import type { Application, NextFunction, Request, Response } from 'express'
 import express from 'express'
+import formsRouter from '../routes/formsRouter'
 import infoRouter from '../routes/infoRouter'
+import uiRouter from '../routes/uiRouter'
 import Log from './log'
 
 export default class HttpService {
@@ -31,6 +33,8 @@ export default class HttpService {
     app.use(express.static('static'))
 
     app.use('/info', infoRouter)
+    app.use('/ui', uiRouter)
+    app.use('/forms', formsRouter)
   }
 
   private static accessLoggingMiddleware(req: Request, res: Response, next: NextFunction) {
