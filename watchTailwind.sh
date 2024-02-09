@@ -1,0 +1,1 @@
+bun tailwindcss -i static/style.css -o static/tailwind.css --watch

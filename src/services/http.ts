@@ -1,5 +1,6 @@
 import type { Application, NextFunction, Request, Response } from 'express'
 import express from 'express'
+import infoRouter from '../routes/infoRouter'
 import Log from './log'
 
 export default class HttpService {
@@ -20,14 +21,16 @@ export default class HttpService {
   }
 
   private static addMiddleware(app: Application) {
+    app.set('view engine', 'ejs')
+
     app.use(express.urlencoded())
     app.use(HttpService.accessLoggingMiddleware)
   }
 
   private static addRoutes(app: Application) {
-    app.get('/', (req, res) => {
-      res.send('Hello World!')
-    })
+    app.use(express.static('static'))
+
+    app.use('/info', infoRouter)
   }
 
   private static accessLoggingMiddleware(req: Request, res: Response, next: NextFunction) {
