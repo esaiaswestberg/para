@@ -1,18 +1,9 @@
-<script lang="ts">
-  import AccountTransaction from './AccountTransaction.svelte'
-</script>
-
-<div class="flex flex-col gap-2 rounded-lg bg-slate-200 py-2 px-3">
-  <div class="flex flex-row justify-between items-center">
-    <span class="text-2xl font-medium">Mat</span>
-    <span class="text-2xl font-medium">5 487 kr</span>
-  </div>
-
-  <span class="block w-full h-[1px] bg-black bg-opacity-5"></span>
-
-  <div class="flex flex-col gap-0">
-    {#each Array(3) as _}
-      <AccountTransaction />
-    {/each}
-  </div>
-</div>
+<a href="/account" class="flex flex-row justify-between items-center bg-emerald-500 text-white px-3 py-2 rounded-lg shadow">
+  <span class="text-2xl font-medium">Mat</span>
+  <span class="text-2xl font-medium"
+    >{Math.round(Math.random() * 5 + 1)}
+    {Math.round(Math.random() * 999)
+      .toString()
+      .padStart(3, '0')} kr</span
+  >
+</a>
