@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import Budget from '../../models/tables/budget'
 import DatabaseService from '../database'
+import { t } from '../trpc'
 
 export default class BudgetService {
   public static create(name: string, budget_group_id: number) {
@@ -57,3 +58,50 @@ export default class BudgetService {
     deleteBudgetAndTransactions(id)
   }
 }
+
+export const BudgetRouter = t.router({
+  budgetCreate: t.procedure
+    .input(
+      z.object({
+        name: z.string(),
+        budget_group_id: z.number().int()
+      })
+    )
+    .mutation(({ input: { name, budget_group_id } }) =>
+      BudgetService.create(name, budget_group_id)
+    ),
+
+  budgetGetAll: t.procedure.output(z.array(Budget)).query(() => BudgetService.getAll()),
+
+  budgetGetById: t.procedure
+    .input(z.number().int())
+    .output(Budget)
+    .query(({ input: id }) => BudgetService.getById(id)),
+
+  budgetGetByGroup: t.procedure
+    .input(z.number().int())
+    .output(z.array(Budget))
+    .query(({ input: budget_group_id }) => BudgetService.getByGroup(budget_group_id)),
+
+  budgetSetName: t.procedure
+    .input(
+      z.object({
+        id: z.number().int(),
+        name: z.string()
+      })
+    )
+    .mutation(({ input: { id, name } }) => BudgetService.setName(id, name)),
+
+  budgetSetGroup: t.procedure
+    .input(
+      z.object({
+        id: z.number().int(),
+        budget_group_id: z.number().int()
+      })
+    )
+    .mutation(({ input: { id, budget_group_id } }) => BudgetService.setGroup(id, budget_group_id)),
+
+  budgetDelete: t.procedure
+    .input(z.number().int())
+    .mutation(({ input: id }) => BudgetService.delete(id))
+})

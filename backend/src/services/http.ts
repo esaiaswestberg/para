@@ -1,8 +1,9 @@
 import * as trpcExpress from '@trpc/server/adapters/express'
 import type { Application, NextFunction, Request, Response } from 'express'
 import express from 'express'
+import { appRouter } from '../router'
 import Log from './log'
-import { appRouter, createContext } from './trpc'
+import { createContext } from './trpc'
 
 export default class HttpService {
   private static app: Application
