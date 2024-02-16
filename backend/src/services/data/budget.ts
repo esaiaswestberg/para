@@ -74,14 +74,14 @@ export const BudgetRouter = t.router({
   budgetGetAll: t.procedure.output(z.array(Budget)).query(() => BudgetService.getAll()),
 
   budgetGetById: t.procedure
-    .input(z.number().int())
+    .input(z.object({ id: z.number().int() }))
     .output(Budget)
-    .query(({ input: id }) => BudgetService.getById(id)),
+    .query(({ input: { id } }) => BudgetService.getById(id)),
 
   budgetGetByGroup: t.procedure
-    .input(z.number().int())
+    .input(z.object({ budget_group_id: z.number().int() }))
     .output(z.array(Budget))
-    .query(({ input: budget_group_id }) => BudgetService.getByGroup(budget_group_id)),
+    .query(({ input: { budget_group_id } }) => BudgetService.getByGroup(budget_group_id)),
 
   budgetSetName: t.procedure
     .input(
@@ -102,6 +102,6 @@ export const BudgetRouter = t.router({
     .mutation(({ input: { id, budget_group_id } }) => BudgetService.setGroup(id, budget_group_id)),
 
   budgetDelete: t.procedure
-    .input(z.number().int())
-    .mutation(({ input: id }) => BudgetService.delete(id))
+    .input(z.object({ id: z.number().int() }))
+    .mutation(({ input: { id } }) => BudgetService.delete(id))
 })

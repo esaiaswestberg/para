@@ -1,5 +1,7 @@
+import { z } from 'zod'
 import Transaction from '../../models/tables/transaction'
 import DatabaseService from '../database'
+import { t } from '../trpc'
 
 export default class TransactionService {
   public static create(
@@ -38,3 +40,31 @@ export default class TransactionService {
     deleteQuery.run(id)
   }
 }
+
+export const TransactionRouter = t.router({
+  transactionCreate: t.procedure
+    .input(
+      z.object({
+        type: z.number(),
+        amount: z.number(),
+        shop: z.string(),
+        date: z.string(),
+        budget_id: z.number()
+      })
+    )
+    .mutation(({ input: { type, amount, shop, date, budget_id } }) =>
+      TransactionService.create(type, amount, shop, date, budget_id)
+    ),
+
+  transactionGetById: t.procedure
+    .input(z.object({ id: z.number() }))
+    .query(({ input: { id } }) => TransactionService.getById(id)),
+
+  transactionGetByBudget: t.procedure
+    .input(z.object({ budget_id: z.number() }))
+    .query(({ input: { budget_id } }) => TransactionService.getByBudget(budget_id)),
+
+  transactionDelete: t.procedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ input: { id } }) => TransactionService.delete(id))
+})

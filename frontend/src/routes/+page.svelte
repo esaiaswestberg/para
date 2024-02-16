@@ -1,22 +1,14 @@
 <script lang="ts">
   import { trpc } from '$lib/trpc'
-  import AccountTile from '../components/accounts/AccountTile.svelte'
-  import FloatingActionButton from '../components/controls/FloatingActionButton.svelte'
-  import Heading from '../components/form/Heading.svelte'
+  import BudgetGroup from '../components/groups/BudgetGroup.svelte'
 
-  const allBudgetsQuery = trpc.budgetGetAll.query()
+  const budgetGroupsQuery = trpc.budgetGroupGetAll.query()
 </script>
 
-{#if $allBudgetsQuery.isSuccess}
-  <div class="flex flex-col gap-2 w-full bg-slate-200 rounded-lg p-4 pt-3">
-    <Heading>Konton</Heading>
-
-    {#each $allBudgetsQuery.data as budget}
-      {#each Array(8) as _}
-        <AccountTile />
-      {/each}
+<div class="flex flex-col gap-4 w-full">
+  {#if $budgetGroupsQuery.isSuccess}
+    {#each $budgetGroupsQuery.data as { id, name }}
+      <BudgetGroup {id} {name} />
     {/each}
-  </div>
-{/if}
-
-<FloatingActionButton />
+  {/if}
+</div>

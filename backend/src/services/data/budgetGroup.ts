@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import BudgetGroup from '../../models/tables/budgetGroup'
 import DatabaseService from '../database'
+import { t } from '../trpc'
 
 export default class BudgetGroupService {
   public static create(name: string) {
@@ -46,3 +47,23 @@ export default class BudgetGroupService {
     deleteBudgetGroup(id)
   }
 }
+
+export const BudgetGroupRouter = t.router({
+  budgetGroupCreate: t.procedure
+    .input(z.object({ name: z.string() }))
+    .mutation(({ input: { name } }) => BudgetGroupService.create(name)),
+
+  budgetGroupGetAll: t.procedure.query(() => BudgetGroupService.getAll()),
+
+  budgetGroupGetById: t.procedure
+    .input(z.object({ id: z.number() }))
+    .query(({ input: { id } }) => BudgetGroupService.getById(id)),
+
+  budgetGroupSetName: t.procedure
+    .input(z.object({ id: z.number(), name: z.string() }))
+    .mutation(({ input: { id, name } }) => BudgetGroupService.setName(id, name)),
+
+  budgetGroupDelete: t.procedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ input: { id } }) => BudgetGroupService.delete(id))
+})
