@@ -6,10 +6,12 @@
   import TransactionsList from '../../components/budgets/TransactionsList.svelte'
   import FloatingActionButton from '../../components/controls/FloatingActionButton.svelte'
 
-  const budgetId = $page.url.searchParams.get('id')
-  if (!budgetId) throw new Error('No budget id provided')
-  const budgetQuery = trpc.budgetGetById.query({ id: parseInt(budgetId) })
-  const transactionsQuery = trpc.transactionGetByBudget.query({ budget_id: parseInt(budgetId) })
+  const budgetIdStr = $page.url.searchParams.get('id')
+  if (!budgetIdStr) throw new Error('No budget id provided')
+  const budgetId = parseInt(budgetIdStr)
+
+  const budgetQuery = trpc.budgetGetById.query({ id: budgetId })
+  const transactionsQuery = trpc.transactionGetByBudget.query({ budget_id: budgetId })
 </script>
 
 {#if $budgetQuery.isSuccess && $transactionsQuery.isSuccess}
@@ -19,7 +21,7 @@
       <span class="text-2xl font-semibold text-left">{formatAmount(sumTransactionsTotal($transactionsQuery.data))}</span>
     </div>
 
-    <TransactionsList budgetId={parseInt(budgetId)} />
+    <TransactionsList {budgetId} />
 
     <!--<div class="flex flex-col gap-3">
       <div class="flex flex-col items-center bg-red-500 p-2 rounded-md text-white">
