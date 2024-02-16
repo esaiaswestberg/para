@@ -1,6 +1,8 @@
+import * as trpcExpress from '@trpc/server/adapters/express'
 import type { Application, NextFunction, Request, Response } from 'express'
 import express from 'express'
 import Log from './log'
+import { appRouter, createContext } from './trpc'
 
 export default class HttpService {
   private static app: Application
@@ -13,21 +15,17 @@ export default class HttpService {
   private static createApplication(): Application {
     const app = express()
 
-    HttpService.addMiddleware(app)
-    HttpService.addRoutes(app)
+    app.use(HttpService.accessLoggingMiddleware)
+
+    app.use(
+      '/trpc',
+      trpcExpress.createExpressMiddleware({
+        router: appRouter,
+        createContext
+      })
+    )
 
     return app
-  }
-
-  private static addMiddleware(app: Application) {
-    app.set('view engine', 'ejs')
-
-    app.use(express.urlencoded())
-    app.use(HttpService.accessLoggingMiddleware)
-  }
-
-  private static addRoutes(app: Application) {
-    app.use((_, res) => res.status(404).send('404 Not Found'))
   }
 
   private static accessLoggingMiddleware(req: Request, res: Response, next: NextFunction) {
